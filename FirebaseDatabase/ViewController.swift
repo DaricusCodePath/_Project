@@ -109,7 +109,7 @@ class ViewController: UIViewController {
                                            "Manager" : Manager!,
                                            "Employee" : Employee!]
         
-        let databaseRef = 
+    
         
     }
 
