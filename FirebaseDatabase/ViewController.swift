@@ -7,12 +7,110 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var DateLabel: UILabel!
+    
+    @IBOutlet weak var UseByLabel: UILabel!
+    
+    @IBOutlet weak var DayLabel: UILabel!
+    
+    @IBOutlet weak var TimeLabel: UILabel!
+    
+    @IBOutlet weak var ItemLabel: UITextField!
+    
+    @IBOutlet weak var MgrLabel: UITextField!
+    
+    @IBOutlet weak var EmpLabel: UITextField!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
+        var timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("getTime"), userInfo: nil, repeats: true)
+        
+        let todayDate = NSDate()
+        let myCalendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+        let myComponents = myCalendar?.components(.Weekday, fromDate: todayDate)
+        let weekDay = myComponents?.weekday
+        
+        print(weekDay!)
+        
+        var Week = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+        
+        
+        DayLabel.text = Week[weekDay!-1]
+        
+        var newDate = addDaystoGivenDate(NSDate(), NumberOfDaysToAdd: 6)
+        
+        var dateFormatter = NSDateFormatter()
+        
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        
+        let strDate = dateFormatter.stringFromDate(newDate)
+        print("New Time\(strDate)")
+        
+        UseByLabel.text = strDate
+        
+        let myCalendar2 = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+        let myComponents2 = myCalendar2?.components(.Weekday, fromDate: newDate)
+        let weekDay2 = myComponents2?.weekday
+        
+        print(weekDay!)
+        
+        print(weekDay2!)
+        
+    }
+    
+    func getTime(){
+        let currentDateTime = NSDate()
+        let formatter = NSDateFormatter()
+        //formatter.timeStyle = NSDateFormatterStyle.MediumStyle
+        formatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        DateLabel.text = formatter.stringFromDate(currentDateTime)
+        
+        let formatter2 = NSDateFormatter()
+        formatter2.timeStyle = NSDateFormatterStyle.MediumStyle
+        //formatter2.dateStyle = NSDateFormatterStyle.MediumStyle
+        TimeLabel.text = formatter2.stringFromDate(currentDateTime)
+    }
+    
+    func addDaystoGivenDate(baseDate:NSDate,NumberOfDaysToAdd:Int)->NSDate
+    {
+        let dateComponents = NSDateComponents()
+        let CurrentCalendar = NSCalendar.currentCalendar()
+        let CalendarOption = NSCalendarOptions()
+        
+        dateComponents.day = NumberOfDaysToAdd-1
+        
+        let newDate = CurrentCalendar.dateByAddingComponents(dateComponents, toDate: baseDate, options: CalendarOption)
+        
+        return newDate!
+    }
+    
+    func LabelData(){
+        let Item = ItemLabel.text
+        let DayOfWeek = DayLabel.text
+        let DateOfInstance = DateLabel.text
+        let TimeOfInstance = TimeLabel.text
+        let ExpirationDate = UseByLabel.text
+        let Manager = MgrLabel.text
+        let Employee = EmpLabel.text
+        
+        let post : [String : AnyObject] = ["Item" : Item!,
+                                           "DayOfWeek" : DayOfWeek!,
+                                           "DateOfInstance" : DateOfInstance!,
+                                           "TimeOfInstance" : TimeOfInstance!,
+                                           "ExpirationDate" : ExpirationDate!,
+                                           "Manager" : Manager!,
+                                           "Employee" : Employee!]
+        
+        let databaseRef = 
+        
     }
 
     override func didReceiveMemoryWarning() {
